@@ -23,8 +23,6 @@ dependencies:
     - field.field.node.grant.field_show_social_sharing
     - field.field.node.grant.field_tags
     - field.field.node.grant.field_topic
-    - field.field.node.grant.scheduled_archiving
-    - field.field.node.grant.scheduled_publishing
     - node.type.grant
   module:
     - user
@@ -68,5 +66,3 @@ hidden:
   field_show_social_sharing: true
   field_tags: true
   field_topic: true
-  scheduled_archiving: true
-  scheduled_publishing: true

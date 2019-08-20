@@ -50,8 +50,6 @@ config_devel:
     - field.field.node.grant.field_show_social_sharing
     - field.field.node.grant.field_tags
     - field.field.node.grant.field_topic
-    - field.field.node.grant.scheduled_archiving
-    - field.field.node.grant.scheduled_publishing
     - field.storage.node.field_description
     - field.storage.node.field_node_author
     - field.storage.node.field_node_dates
