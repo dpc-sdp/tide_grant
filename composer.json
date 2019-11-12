@@ -2,12 +2,11 @@
     "name": "dpc-sdp/tide_grant",
     "description": "Grant content type and related configuration for Tide Drupal 8 distribution",
     "type": "drupal-module",
-    "license": "GPL-2.0+",
-    "version": "0.0.1",
+    "license": "GPL-2.0-or-later",
     "require": {
         "drupal/range": "^1.1",
-        "dpc-sdp/tide_core": "@dev",
-        "dpc-sdp/tide_media": "@dev"
+        "dpc-sdp/tide_core": "dev-feature/SDPA-2794_migrate_sdp-dpc_modules as 1.4.0",
+        "dpc-sdp/tide_media": "^1.2.6"
     },
     "repositories": {
         "drupal": {
