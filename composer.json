@@ -4,9 +4,12 @@
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "require": {
-        "drupal/range": "^1.1",
         "dpc-sdp/tide_core": "dev-feature/SDPA-2794_migrate_sdp-dpc_modules as 1.4.0",
-        "dpc-sdp/tide_media": "^1.2.6"
+        "dpc-sdp/tide_media": "^1.2.6",
+        "drupal/migrate_cron": "^1.2",
+        "drupal/migrate_plus": "4.2",
+        "drupal/migrate_tools": "^4.4",
+        "drupal/range": "^1.1"
     },
     "repositories": {
         "drupal": {
@@ -15,5 +18,17 @@
         }
     },
     "minimum-stability": "alpha",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "enable-patching": true,
+        "patches": {
+            "drupal/migrate_plus": {
+                "EntityGenerate does not process the values correctly - https://www.drupal.org/project/migrate_plus/issues/2975266": "https://www.drupal.org/files/issues/2019-02-21/migrate_plus-provide_multiple_values-2975266-20.patch",
+                "Simple XML broken with UTF-16LE - https://www.drupal.org/project/migrate_plus/issues/3051858": "https://www.drupal.org/files/issues/2019-05-01/3051858-migrate_plus-simplexml_remove_trim-2.patch"
+            },
+            "drupal/migrate_cron": {
+                "Provide the ability to execute dependent migrations - https://www.drupal.org/project/migrate_cron/issues/3051619#comment-13087893": "https://www.drupal.org/files/issues/2019-04-30/3051619-migrate_cron-execute_dependencies-2.patch"
+            }
+        }
+    }
 }
