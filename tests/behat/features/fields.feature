@@ -19,9 +19,6 @@ Feature: Fields for Grant content type
     And I see field "Audience"
     And I should see an "input#edit-field-audience-0-target-id.required" element
 
-    And I should see an "input[name='field_node_primary_site']" element
-    And I should see an "input[name^='field_node_site']" element
-
     And I see field "Introduction Text"
     And I should see an "textarea#edit-field-landing-page-intro-text-0-value" element
     And I should not see an "textarea#edit-field-landing-page-intro-text-0-value.required" element

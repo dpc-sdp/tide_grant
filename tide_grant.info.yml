@@ -8,6 +8,7 @@ dependencies:
   - drupal:migrate_cron
   - drupal:migrate_plus
   - drupal:migrate_tools
+  - drupal:range
   - dpc-sdp:tide_core
   - dpc-sdp:tide_media
 config_devel:
@@ -42,8 +43,6 @@ config_devel:
     - field.field.node.grant.field_node_link
     - field.field.node.grant.field_node_on_going
     - field.field.node.grant.field_node_phone
-    - field.field.node.grant.field_node_primary_site
-    - field.field.node.grant.field_node_site
     - field.field.node.grant.field_node_timeline
     - field.field.node.grant.field_overview_title
     - field.field.node.grant.field_show_content_rating
