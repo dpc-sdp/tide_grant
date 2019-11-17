@@ -61,7 +61,6 @@ config_devel:
     - field.storage.node.field_overview_title
     - migrate_cron.settings
     - migrate_plus.migration_group.default
-    - paragraphs.paragraphs_type.timelines
     - tide_grant.settings
     - webform.webform.tide_grant_submission
   optional:
