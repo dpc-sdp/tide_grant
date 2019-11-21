@@ -4,7 +4,7 @@ Feature: JSON API Webform
   Ensure that the Grant Submission form is exposed via JSON API.
 
   Scenario: Send GET request to retrieve the Content Rating form
-    When I send a GET request to "/api/v1/webform/webform?filter[id][value]=tide_grant_submission"
+    When I send a GET request to "/api/v1/webform/webform?filter[drupal_internal__id][value]=tide_grant_submission"
     Then the rest response status code should be 200
     And the response should be in JSON
     And the JSON node "meta.count" should exist
