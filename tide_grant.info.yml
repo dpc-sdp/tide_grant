@@ -12,6 +12,7 @@ dependencies:
   - drupal:migrate_plus
   - drupal:migrate_tools
   - drupal:range
+  - webform
 config_devel:
   install:
     - node.type.grant
