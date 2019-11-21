@@ -4,13 +4,14 @@ description: 'Provides Grant content type and related configuration. '
 package: Tide
 core: 8.x
 dependencies:
+  - dpc-sdp:tide_core
+  - dpc-sdp:tide_media
   - drupal:datetime_range
+  - drupal:menu_ui
   - drupal:migrate_cron
   - drupal:migrate_plus
   - drupal:migrate_tools
   - drupal:range
-  - dpc-sdp:tide_core
-  - dpc-sdp:tide_media
 config_devel:
   install:
     - node.type.grant
