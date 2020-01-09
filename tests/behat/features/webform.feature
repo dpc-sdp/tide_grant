@@ -59,7 +59,7 @@ Feature: Webform "Grant Submission" exists.
       | Contact person | John Doe |
       | Contact email address | noreply@example.com |
       | Contact telephone number | 0412123123 |
-    And I select "Health" from "Topic"
+    And I select "Arts" from "Topic"
     And I select "Individual" from "Who is the grant or program for?"
     And I select "Department of Premier and Cabinet" from "Department, agency or provider organisation"
     And I check "I understand and agree to the privacy and disclaimer"
