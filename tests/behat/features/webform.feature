@@ -1,9 +1,9 @@
 @tide
 Feature: Webform "Grant Submission" exists.
 
-  Ensure that the 'Content Rating' webform exists
+  Ensure that the 'Grant Submission' webform exists
 
-  @api
+  @api @nosuggest
   Scenario: The form has the expected fields (and labels where we can use them).
     Given I am logged in as a user with the "administer webform" permission
     When I visit "admin/structure/webform"
@@ -26,7 +26,7 @@ Feature: Webform "Grant Submission" exists.
     And I see field "Contact telephone number"
     And I should see the button "Submit"
 
-  @api
+  @api @nosuggest
   Scenario: Check for required form fields.
     Given I am an anonymous user
     When I visit "form/tide-grant-submission"
@@ -43,7 +43,7 @@ Feature: Webform "Grant Submission" exists.
     And I see the "#edit-contact-email-address" element with the "required" attribute set to "required" in the "content" region
     And I see the "#edit-contact-telephone-number" element with the "required" attribute set to "required" in the "content" region
 
-  @api
+  @api @nosuggest
   Scenario: Check form submission.
     Given I am an anonymous user
     When I visit "form/tide-grant-submission"
@@ -66,6 +66,8 @@ Feature: Webform "Grant Submission" exists.
     And I press "Submit"
     Then I should see the text "We'll take a look at your grant before it's published live in the vic.gov.au grants database. We will let you know once your grant has been published. Alternatively, we'll be in touch for more information."
 
+  @api @nosuggest
+  Scenario: The Grant node is expected to be created from webform submission.
     Given I am logged in as a user with the "administrator" role
     When I visit "/admin/content?title=&type=grant&status=2&langcode=All"
     Then I should see "Test Grant"
