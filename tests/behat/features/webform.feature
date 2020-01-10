@@ -45,6 +45,7 @@ Feature: Webform "Grant Submission" exists.
 
   @api @nosuggest
   Scenario: Check form submission.
+    Given I run cron
     Given an audience term with the name Test
     And a department term with the name Test
     And I am an anonymous user
@@ -61,6 +62,7 @@ Feature: Webform "Grant Submission" exists.
       | Contact person | John Doe |
       | Contact email address | noreply@example.com |
       | Contact telephone number | 0412123123 |
+    Given I run cron
     And I select "Arts" from "Topic"
     And I select "Test" from "Who is the grant or program for?"
     And I select "Test" from "Department, agency or provider organisation"
