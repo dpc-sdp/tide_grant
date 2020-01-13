@@ -47,6 +47,7 @@ Feature: Webform "Grant Submission" exists.
   Scenario: Check form submission.
     Given an audience term with the name Test
     And a department term with the name Test
+    And the cache has been cleared
     And I am an anonymous user
     When I visit "form/tide-grant-submission"
     And I fill in the following:
@@ -61,7 +62,6 @@ Feature: Webform "Grant Submission" exists.
       | Contact person | John Doe |
       | Contact email address | noreply@example.com |
       | Contact telephone number | 0412123123 |
-
     And I select "Arts" from "Topic"
     And I select "Test" from "Who is the grant or program for?"
     And I select "Test" from "Department, agency or provider organisation"
@@ -69,6 +69,8 @@ Feature: Webform "Grant Submission" exists.
     And I press "Submit"
     Then I should see the text "We'll take a look at your grant before it's published live in the vic.gov.au grants database. We will let you know once your grant has been published. Alternatively, we'll be in touch for more information."
 
+  @api @nosuggest
+  Scenario: The Grant node is expected to be created from webform submission.
     Given I am logged in as a user with the "administrator" role
     When I visit "/admin/content?title=&type=grant&status=2&langcode=All"
     Then I should see "Test Grant"
