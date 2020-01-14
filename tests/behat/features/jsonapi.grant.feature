@@ -1,4 +1,4 @@
-@tide @jsonapi @api
+@tide @jsonapi @suggest
 Feature: JSON API Webform
 
   Ensure that the Grant Submission form is exposed via JSON API.
