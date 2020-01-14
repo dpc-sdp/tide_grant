@@ -161,3 +161,30 @@ function tide_grant_update_8009() {
     $field->save();
   }
 }
+
+/**
+ * Grant Webform Configuration access to API requests.
+ */
+function tide_grant_update_8010() {
+  $webforms = \Drupal::entityTypeManager()
+    ->getStorage('webform')
+    ->loadByProperties(['id' => 'tide_grant_submission']);
+  if ($webform = reset($webforms)) {
+    /** @var \Drupal\webform\Entity\Webform $webform */
+    $access_rules = $webform->getAccessRules();
+    if (!isset($access_rules['configuration']['roles'])) {
+      $access_rules['configuration'] = [
+        'roles' => [AccountInterface::ANONYMOUS_ROLE],
+        'users' => [],
+        'permissions' => [],
+      ];
+      $webform->setAccessRules($access_rules);
+      $webform->save();
+    }
+    elseif (!in_array(AccountInterface::ANONYMOUS_ROLE, $access_rules['configuration']['roles'])) {
+      $access_rules['configuration']['roles'][] = AccountInterface::ANONYMOUS_ROLE;
+      $webform->setAccessRules($access_rules);
+      $webform->save();
+    }
+  }
+}

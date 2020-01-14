@@ -265,6 +265,10 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
+  configuration:
+    roles:
+      - anonymous
+      - authenticated
 handlers:
   grant_submission_email:
     id: email
