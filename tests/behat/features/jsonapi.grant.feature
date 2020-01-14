@@ -1,10 +1,9 @@
-@tide @jsonapi @api @wip
+@tide @jsonapi @api
 Feature: JSON API Webform
 
   Ensure that the Grant Submission form is exposed via JSON API.
 
   Scenario: Send GET request to retrieve the Content Rating form
-#    Given I am logged in as a user with the administrator role
     When I send a GET request to "/api/v1/webform/webform?filter[drupal_internal__id][value]=tide_grant_submission"
     Then the rest response status code should be 200
     And the response should be in JSON
@@ -31,4 +30,3 @@ Feature: JSON API Webform
     And the JSON node "data[0].attributes.elements.agree_privacy_statement" should exist
     And the JSON node "data[0].attributes.elements.open_date" should exist
     And the JSON node "data[0].attributes.elements.close_date" should exist
-    And the JSON node "data[0].attributes.markup" should exist
