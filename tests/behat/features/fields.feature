@@ -48,17 +48,17 @@ Feature: Fields for Grant content type
     And I see field "Department"
     And I should see an "select#edit-field-node-department" element
 
-    And I should see text matching "Funding Level"
-    And I should see an "input#edit-field-node-funding-level-0-from" element
+#    And I see "Funding Level"
+#    And I should see an "input#edit-field-node-funding-level-0-from" element
 
     And I should see text matching "Contact"
-    And I click "Contact"
+    And I click Contact
     Then I should see text matching "Contact Us"
 
     # Grant Overview paragraph
     When I click "Grant Details"
     Then I see field "Title"
-    And I should see an "input#edit-field-overview-title-0-value.required" element
+    And I should see an "input#edit-field-overview-title-0-value" element
     And I should see an "textarea#edit-field-description-0-value" element
     And I should see an "input#edit-field-call-to-action-0-uri" element
 
