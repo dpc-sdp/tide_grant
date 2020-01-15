@@ -1,5 +1,4 @@
 @tide
-# @TODO remove @skipped once the module is extracted to its own repo.
 Feature: Fields for Grant content type
 
   Ensure that Grant content has the expected fields.
@@ -49,7 +48,7 @@ Feature: Fields for Grant content type
     And I see field "Department"
     And I should see an "select#edit-field-node-department" element
 
-    And I should see text "Funding Level"
+    And I should see text matching "Funding Level"
     And I should see an "input#edit-field-node-funding-level-0-from" element
 
     And I should see text matching "Contact"
