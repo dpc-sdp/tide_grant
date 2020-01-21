@@ -5,10 +5,11 @@
  * Tide Grant module install file..
  */
 
-use Drupal\workflows\Entity\Workflow;
-use Drupal\user\Entity\User;
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\user\Entity\User;
+use Drupal\workflows\Entity\Workflow;
 
 /**
  * Implements hook_install().
@@ -159,5 +160,32 @@ function tide_grant_update_8009() {
   if (!$field->get('default_value')) {
     $field->set('default_value', TRUE);
     $field->save();
+  }
+}
+
+/**
+ * Grant Webform Configuration access to API requests.
+ */
+function tide_grant_update_8010() {
+  $webforms = \Drupal::entityTypeManager()
+    ->getStorage('webform')
+    ->loadByProperties(['id' => 'tide_grant_submission']);
+  if ($webform = reset($webforms)) {
+    /** @var \Drupal\webform\Entity\Webform $webform */
+    $access_rules = $webform->getAccessRules();
+    if (!isset($access_rules['configuration']['roles'])) {
+      $access_rules['configuration'] = [
+        'roles' => [AccountInterface::ANONYMOUS_ROLE],
+        'users' => [],
+        'permissions' => [],
+      ];
+      $webform->setAccessRules($access_rules);
+      $webform->save();
+    }
+    elseif (!in_array(AccountInterface::ANONYMOUS_ROLE, $access_rules['configuration']['roles'])) {
+      $access_rules['configuration']['roles'][] = AccountInterface::ANONYMOUS_ROLE;
+      $webform->setAccessRules($access_rules);
+      $webform->save();
+    }
   }
 }

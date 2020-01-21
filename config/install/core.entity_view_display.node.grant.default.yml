@@ -22,8 +22,6 @@ dependencies:
     - field.field.node.grant.field_node_link
     - field.field.node.grant.field_node_on_going
     - field.field.node.grant.field_node_phone
-    - field.field.node.grant.field_node_primary_site
-    - field.field.node.grant.field_node_site
     - field.field.node.grant.field_node_timeline
     - field.field.node.grant.field_overview_title
     - field.field.node.grant.field_show_content_rating
@@ -245,5 +243,3 @@ hidden:
   field_node_department: true
   field_node_email: true
   field_node_phone: true
-  field_node_primary_site: true
-  field_node_site: true

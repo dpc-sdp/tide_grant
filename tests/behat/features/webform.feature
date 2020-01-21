@@ -1,13 +1,13 @@
 @tide
 Feature: Webform "Grant Submission" exists.
 
-  Ensure that the 'Content Rating' webform exists
+  Ensure that the 'Grant Submission' webform exists
 
   @api @nosuggest
   Scenario: The form has the expected fields (and labels where we can use them).
     Given I am logged in as a user with the "administer webform" permission
     When I visit "admin/structure/webform"
-    Then I see the link "Grant Submission"
+    Then I should see the link "Grant Submission"
 
     When I click "Grant Submission"
     Then I see field "Name of grant or program"
@@ -45,7 +45,10 @@ Feature: Webform "Grant Submission" exists.
 
   @api @nosuggest
   Scenario: Check form submission.
-    Given I am an anonymous user
+    Given an audience term with the name Test
+    And a department term with the name Test
+    And the cache has been cleared
+    And I am an anonymous user
     When I visit "form/tide-grant-submission"
     And I fill in the following:
       | Name of grant or program | Test Grant |
@@ -59,12 +62,13 @@ Feature: Webform "Grant Submission" exists.
       | Contact person | John Doe |
       | Contact email address | noreply@example.com |
       | Contact telephone number | 0412123123 |
-    And I select "Individual" from "Topic"
-    And I select "Individual" from "Who is the grant or program for?"
-    And I select "Department of Premier and Cabinet" from "Department, agency or provider organisation"
-    And I check "I understand and agree to the privacy and disclaimer"
+    And I select "Arts" from "Topic"
+    And I select "Test" from "Who is the grant or program for?"
+    And I select "Test" from "Department, agency or provider organisation"
+    And I check "I have read and understand how Department of Premier and Cabinet stores information."
     And I press "Submit"
-    Then I should see the text "We'll take a look at your grant before it's published live in the vic.gov.au grants database. We will let you know once your grant has been published. Alternatively, we'll be in touch for more information."
+    And I save screenshot
+    Then I should see "We'll take a look at your grant before it's published live in the vic.gov.au grants database. We will let you know once your grant has been published. Alternatively, we'll be in touch for more information."
 
   @api @nosuggest
   Scenario: The Grant node is expected to be created from webform submission.
