@@ -189,3 +189,27 @@ function tide_grant_update_8010() {
     }
   }
 }
+
+/**
+ * Enable entity type/bundles for use with scheduled transitions.
+ */
+function tide_grant_update_8011() {
+  if (\Drupal::moduleHandler()->moduleExists('scheduled_transitions')) {
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('scheduled_transitions.settings');
+    $bundles = $config->get('bundles');
+    if ($bundles) {
+      foreach ($bundles as $bundle) {
+        $enabled_bundles[] = $bundle['bundle'];
+      }
+      if (!in_array('grant', $enabled_bundles)) {
+        $bundles[] = ['entity_type' => 'node', 'bundle' => 'grant'];
+        $config->set('bundles', $bundles)->save();
+      }
+    }
+    else {
+      $bundles[] = ['entity_type' => 'node', 'bundle' => 'grant'];
+      $config->set('bundles', $bundles)->save();
+    }
+  }
+}
