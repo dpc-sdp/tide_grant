@@ -70,6 +70,23 @@ function tide_grant_config_ignore_settings_alter(array &$settings) {
  */
 function tide_grant_webform_submission_presave($submission) {
   if ($submission->getWebform()->get('id') === 'tide_grant_submission') {
+    $has_sites = FALSE;
+    $node_sites = [];
+    $node_primary_site = 0;
+    if ($site = (int) \Drupal::request()->query->get('site')) {
+      /** @var \Drupal\tide_site\TideSiteHelper $helper */
+      $helper = \Drupal::service('tide_site.helper');
+      $site_trail = $helper->getSiteTrail($site);
+      if (count($site_trail) == 1) {
+        $node_sites = [$site];
+        $node_primary_site = $site;
+      }
+      else {
+        $node_sites = $site_trail;
+        $node_primary_site = $site_trail[0];
+      }
+      $has_sites = TRUE;
+    }
     $submission_data = $submission->getData();
     // Create node object with values from webform submission.
     $node = Node::create([
@@ -114,6 +131,12 @@ function tide_grant_webform_submission_presave($submission) {
       'field_node_email' => $submission_data['contact_email_address'],
       'field_node_phone' => $submission_data['contact_telephone_number'],
     ]);
+    if ($has_sites) {
+      $node->field_node_primary_site->target_id = $node_primary_site;
+      foreach ($node_sites as $site_id) {
+        $node->field_node_site->appendItem($site_id);
+      }
+    }
 
     // Loop through multiple value fields.
     foreach ($submission_data['who_is_the_grant_or_program_for_'] as $topic) {
