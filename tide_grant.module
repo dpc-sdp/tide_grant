@@ -26,9 +26,12 @@ function tide_grant_form_node_form_alter(&$form, FormStateInterface $form_state,
     $form['field_node_guidelines']['widget'][0]['subform']['field_paragraph_title']['widget'][0]['value']['#required'] = TRUE;
     // Lookup our preset values from config.
     if ($config = \Drupal::config('tide_grant.settings')->get('guidelines')) {
-      foreach ($config as $key => $value) {
-        if ($element = &$form['field_node_guidelines']['widget'][0]['subform']['field_paragraph_accordion']['widget'][$key]) {
-          $element['subform']['field_paragraph_accordion_name']['widget'][0]['value']['#default_value'] = $value;
+      // Preset values should only be pre-filled from creating a new node.
+      if ($form_id == 'node_grant_form') {
+        foreach ($config as $key => $value) {
+          if ($element = &$form['field_node_guidelines']['widget'][0]['subform']['field_paragraph_accordion']['widget'][$key]) {
+            $element['subform']['field_paragraph_accordion_name']['widget'][0]['value']['#default_value'] = $value;
+          }
         }
       }
     }
