@@ -149,9 +149,9 @@ function tide_grant_migration_plugins_alter(array &$migrations) {
 
 /**
  * Implements hook_node_insert().
- * Everytime the feed will import contents, this will trigger.
  */
 function tide_grant_node_insert(NodeInterface $node) {
+  // Everytime the feed will import contents, this will trigger.
   // Only update the grant nodes created by anonymous user.
   if (!empty($node) && $node->bundle() == 'grant' && $node->getOwnerId() == 0) {
     if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {

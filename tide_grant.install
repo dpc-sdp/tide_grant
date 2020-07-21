@@ -9,7 +9,6 @@ use Drupal\Component\Utility\Random;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Config\FileStorage;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
 use Drupal\workflows\Entity\Workflow;
 use Drupal\node\Entity\Node;
@@ -227,11 +226,9 @@ function tide_grant_update_8012() {
   $source = new FileStorage($config_path);
   $config_storage = \Drupal::service('config.storage');
   $config_storage->write($metaTags, $source->read($metaTags));
-  
-   // Adding the field to display form.
-   $entity_form_display = Drupal::entityTypeManager()
-   ->getStorage('entity_form_display')
-   ->load('node.grant.default');
+
+  // Adding the field to display form.
+  $entity_form_display = Drupal::entityTypeManager()->getStorage('entity_form_display')->load('node.grant.default');
   if ($entity_form_display) {
     $entity_form_display->setComponent('field_metatags', [
       'weight' => 13,
@@ -244,9 +241,7 @@ function tide_grant_update_8012() {
   $entity_form_display->save();
 
   // Adding the field to display view.
-  $entity_view_display = Drupal::entityTypeManager()
-   ->getStorage('entity_view_display')
-   ->load('node.grant.default');
+  $entity_view_display = Drupal::entityTypeManager()->getStorage('entity_view_display')->load('node.grant.default');
   if ($entity_view_display) {
     $entity_view_display->setComponent('field_metatags', [
       'weight' => 128,
@@ -262,11 +257,10 @@ function tide_grant_update_8012() {
 
 /**
  * Update sitemap indexing and search metatag to noindex.
- * Only for existing nodes created from feed.
  */
 function tide_grant_update_8013() {
   $nodes = Node::loadMultiple();
-  foreach($nodes as $node) {
+  foreach ($nodes as $node) {
     // Only update the grant nodes created by anonymous user.
     if ($node->bundle() == 'grant' && $node->getOwnerId() == 0) {
       if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {
