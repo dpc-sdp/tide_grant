@@ -8,8 +8,11 @@
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Config\FileStorage;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
 use Drupal\workflows\Entity\Workflow;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_install().
@@ -210,6 +213,78 @@ function tide_grant_update_8011() {
     else {
       $bundles[] = ['entity_type' => 'node', 'bundle' => 'grant'];
       $config->set('bundles', $bundles)->save();
+    }
+  }
+}
+
+/**
+ * Adds field metatags to tide_grant.
+ */
+function tide_grant_update_8012() {
+  // Adding the field from config install.
+  $metaTags = 'field.field.node.grant.field_metatags';
+  $config_path = drupal_get_path('module', 'tide_grant') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write($metaTags, $source->read($metaTags));
+  
+   // Adding the field to display form.
+   $entity_form_display = Drupal::entityTypeManager()
+   ->getStorage('entity_form_display')
+   ->load('node.grant.default');
+  if ($entity_form_display) {
+    $entity_form_display->setComponent('field_metatags', [
+      'weight' => 13,
+      'settings' => ['sidebar' => TRUE],
+      'third_party_settings' => [],
+      'type' => 'metatag_firehose',
+      'region' => 'content',
+    ]);
+  }
+  $entity_form_display->save();
+
+  // Adding the field to display view.
+  $entity_view_display = Drupal::entityTypeManager()
+   ->getStorage('entity_view_display')
+   ->load('node.grant.default');
+  if ($entity_view_display) {
+    $entity_view_display->setComponent('field_metatags', [
+      'weight' => 128,
+      'label' => 'above',
+      'settings' => [],
+      'third_party_settings' => [],
+      'type' => 'metatag_empty_formatter',
+      'region' => 'content',
+    ]);
+  }
+  $entity_view_display->save();
+}
+
+/**
+ * Update sitemap indexing and search metatag to noindex.
+ * Only for existing nodes created from feed.
+ */
+function tide_grant_update_8013() {
+  $nodes = Node::loadMultiple();
+  foreach($nodes as $node) {
+    // Only update the grant nodes created by anonymous user.
+    if ($node->bundle() == 'grant' && $node->getOwnerId() == 0) {
+      if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {
+        $node->set('field_metatags', serialize([
+          'robots' => 'noindex',
+        ]));
+        $node->save();
+      }
+      if (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
+        $generator = \Drupal::service('simple_sitemap.generator');
+        $settings = [
+          'index' => FALSE,
+          'priority' => 0.5,
+          'changefreq' => 'never',
+          'include_images' => FALSE,
+        ];
+        $generator->setEntityInstanceSettings($node->getEntityTypeId(), $node->id(), $settings);
+      }
     }
   }
 }

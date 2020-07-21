@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.grant.field_landing_page_nav_title
     - field.field.node.grant.field_landing_page_show_contact
     - field.field.node.grant.field_landing_page_summary
+    - field.field.node.grant.field_metatags
     - field.field.node.grant.field_news_intro_text
     - field.field.node.grant.field_node_author
     - field.field.node.grant.field_node_dates
@@ -33,6 +34,7 @@ dependencies:
     - datetime_range
     - entity_reference_revisions
     - link
+    - metatag
     - range
     - text
     - user
@@ -113,6 +115,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: basic_string
+    region: content
+  field_metatags:
+    weight: 128
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
     region: content
   field_node_dates:
     weight: 9
