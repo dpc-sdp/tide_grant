@@ -91,7 +91,7 @@ content:
     type: entity_reference_revisions_entity_view
     region: content
   field_landing_page_intro_text:
-    weight: 2
+    weight: 1
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -232,7 +232,7 @@ content:
     type: entity_reference_label
     region: content
   links:
-    weight: 1
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
