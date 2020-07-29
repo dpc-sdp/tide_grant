@@ -224,8 +224,11 @@ function tide_grant_update_8012() {
   $metaTags = 'field.field.node.grant.field_metatags';
   $config_path = drupal_get_path('module', 'tide_grant') . '/config/install';
   $source = new FileStorage($config_path);
-  $config_storage = \Drupal::service('config.storage');
-  $config_storage->write($metaTags, $source->read($metaTags));
+  // Obtain the storage manager for field instances
+  // Create a new field instance from the yaml configuration and save
+  \Drupal::entityManager()->getStorage('field_config')
+    ->create($source->read($metaTags))
+    ->save();
 
   // Adding the field to display form.
   $entity_form_display = Drupal::entityTypeManager()->getStorage('entity_form_display')->load('node.grant.default');
@@ -256,28 +259,38 @@ function tide_grant_update_8012() {
 }
 
 /**
- * Update sitemap indexing and search metatag to noindex.
- */
+* Update sitemap indexing and search metatag to noindex.
+*/
 function tide_grant_update_8013() {
-  $nodes = Node::loadMultiple();
-  foreach ($nodes as $node) {
-    // Only update the grant nodes created by anonymous user.
-    if ($node->bundle() == 'grant' && $node->getOwnerId() == 0) {
-      if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {
-        $node->set('field_metatags', serialize([
-          'robots' => 'noindex',
-        ]));
-        $node->save();
-      }
-      if (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
-        $generator = \Drupal::service('simple_sitemap.generator');
-        $settings = [
-          'index' => FALSE,
-          'priority' => 0.5,
-          'changefreq' => 'never',
-          'include_images' => FALSE,
-        ];
-        $generator->setEntityInstanceSettings($node->getEntityTypeId(), $node->id(), $settings);
+  // Getting only the grant content type node ids.
+  $nids = \Drupal::entityTypeManager()
+    ->getStorage('node')
+    ->getQuery()
+    ->condition('type','grant')
+    ->condition('uid',0)
+    ->execute();
+  if (!empty($nids)) {
+    $nodes = Node::loadMultiple($nids);
+    foreach ($nodes as $node) {
+      // Only update the grant nodes created by anonymous user.
+      if ($node->getOwnerId() == 0) {
+        if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {
+          $node->set('field_metatags', serialize([
+            'robots' => 'noindex',
+          ]));
+          $node->setNewRevision(FALSE);
+          $node->save();
+        }
+        if (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
+          $generator = \Drupal::service('simple_sitemap.generator');
+          $settings = [
+            'index' => FALSE,
+            'priority' => 0.5,
+            'changefreq' => 'never',
+            'include_images' => FALSE,
+          ];
+          $generator->setEntityInstanceSettings($node->getEntityTypeId(), $node->id(), $settings);
+        }
       }
     }
   }
