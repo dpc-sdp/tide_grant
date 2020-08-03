@@ -73,19 +73,21 @@ function tide_grant_webform_submission_presave($submission) {
     $has_sites = FALSE;
     $node_sites = [];
     $node_primary_site = 0;
-    if ($site = (int) \Drupal::request()->query->get('site')) {
-      /** @var \Drupal\tide_site\TideSiteHelper $helper */
-      $helper = \Drupal::service('tide_site.helper');
-      $site_trail = $helper->getSiteTrail($site);
-      if (count($site_trail) == 1) {
-        $node_sites = [$site];
-        $node_primary_site = $site;
+    if (\Drupal::moduleHandler()->moduleExists('tide_site')) {
+      if ($site = (int) \Drupal::request()->query->get('site')) {
+        /** @var \Drupal\tide_site\TideSiteHelper $helper */
+        $helper = \Drupal::service('tide_site.helper');
+        $site_trail = $helper->getSiteTrail($site);
+        if (count($site_trail) == 1) {
+          $node_sites = [$site];
+          $node_primary_site = $site;
+        }
+        else {
+          $node_sites = $site_trail;
+          $node_primary_site = $site_trail[0];
+        }
+        $has_sites = TRUE;
       }
-      else {
-        $node_sites = $site_trail;
-        $node_primary_site = $site_trail[0];
-      }
-      $has_sites = TRUE;
     }
     $submission_data = $submission->getData();
     // Create node object with values from webform submission.
