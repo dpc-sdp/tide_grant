@@ -118,6 +118,26 @@ function tide_grant_webform_submission_presave($submission) {
       'field_node_phone' => $submission_data['contact_telephone_number'],
     ]);
 
+    if (\Drupal::moduleHandler()->moduleExists('tide_site')) {
+      if ($site = (int) \Drupal::request()->query->get('site')) {
+        /** @var \Drupal\tide_site\TideSiteHelper $helper */
+        $helper = \Drupal::service('tide_site.helper');
+        $site_trail = $helper->getSiteTrail($site);
+        if (count($site_trail) == 1) {
+          $node_sites = [$site];
+          $node_primary_site = $site;
+        }
+        else {
+          $node_sites = $site_trail;
+          $node_primary_site = $site_trail[0];
+        }
+        $node->field_node_primary_site->target_id = $node_primary_site;
+        foreach ($node_sites as $site_id) {
+          $node->field_node_site->appendItem($site_id);
+        }
+      }
+    }
+
     // Loop through multiple value fields.
     foreach ($submission_data['who_is_the_grant_or_program_for_'] as $topic) {
       $node->field_audience->appendItem($topic);
