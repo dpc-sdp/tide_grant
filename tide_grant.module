@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\node\Entity\Node;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -118,6 +119,26 @@ function tide_grant_webform_submission_presave($submission) {
       'field_node_phone' => $submission_data['contact_telephone_number'],
     ]);
 
+    if (\Drupal::moduleHandler()->moduleExists('tide_site')) {
+      if ($site = (int) \Drupal::request()->query->get('site')) {
+        /** @var \Drupal\tide_site\TideSiteHelper $helper */
+        $helper = \Drupal::service('tide_site.helper');
+        $site_trail = $helper->getSiteTrail($site);
+        if (count($site_trail) == 1) {
+          $node_sites = [$site];
+          $node_primary_site = $site;
+        }
+        else {
+          $node_sites = $site_trail;
+          $node_primary_site = $site_trail[0];
+        }
+        $node->field_node_primary_site->target_id = $node_primary_site;
+        foreach ($node_sites as $site_id) {
+          $node->field_node_site->appendItem($site_id);
+        }
+      }
+    }
+
     // Loop through multiple value fields.
     foreach ($submission_data['who_is_the_grant_or_program_for_'] as $topic) {
       $node->field_audience->appendItem($topic);
@@ -143,5 +164,34 @@ function tide_grant_migration_plugins_alter(array &$migrations) {
   $url = \Drupal::config('tide_grant.settings')->get('feed_url');
   if ($url && UrlHelper::isValid($url, TRUE)) {
     $migrations['grants_feed_importer']['source']['urls'] = $url;
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function tide_grant_node_insert(NodeInterface $node) {
+  if ($node->bundle() != 'grant') {
+    return;
+  }
+  // Everytime the feed will import contents, this will trigger.
+  // Only update the grant nodes created by anonymous user.
+  if ($node->getOwnerId() == 0) {
+    if ($node->hasField('field_metatags') && \Drupal::moduleHandler()->moduleExists('metatag')) {
+      $node->set('field_metatags', serialize([
+        'robots' => 'noindex',
+      ]));
+      $node->save();
+    }
+    if (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
+      $generator = \Drupal::service('simple_sitemap.generator');
+      $settings = [
+        'index' => FALSE,
+        'priority' => 0.5,
+        'changefreq' => 'never',
+        'include_images' => FALSE,
+      ];
+      $generator->setEntityInstanceSettings($node->getEntityTypeId(), $node->id(), $settings);
+    }
   }
 }
