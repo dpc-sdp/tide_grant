@@ -222,12 +222,15 @@ function tide_grant_update_8011() {
 function tide_grant_update_8012() {
   // Adding the field from config install.
   $metaTags = 'field.field.node.grant.field_metatags';
-  $config_path = drupal_get_path('module', 'tide_grant') . '/config/install';
-  $source = new FileStorage($config_path);
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  // Check if field already exported to config/sync.
+  $config_read = _tide_read_config($metaTags, $config_location, TRUE);
+
   // Obtain the storage manager for field instances.
   // Create a new field instance from the yaml configuration and save.
   \Drupal::entityManager()->getStorage('field_config')
-    ->create($source->read($metaTags))
+    ->create($config_read)
     ->save();
 
   // Adding the field to display form.
