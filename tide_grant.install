@@ -297,3 +297,23 @@ function tide_grant_update_8013() {
     }
   }
 }
+
+/**
+ * Update tide_grant_submission to add states in funding_level_to field.
+ */
+function tide_grant_update_8014() {
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  // Get the new configs.
+  $webform = 'webform.webform.tide_grant_submission';
+  $config_path = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  // Rread it from the config sync directory.
+  $webform_config = _tide_read_config($webform, $config_path, FALSE);
+  $webform_elements = $webform_config['elements'];
+  if ($webform_elements) {
+    // Set the new configs in sync.
+    $tide_grant_submission = \Drupal::configFactory()
+      ->getEditable($webform);
+    $tide_grant_submission->set('elements', $webform_elements)
+      ->save();
+  }
+}
