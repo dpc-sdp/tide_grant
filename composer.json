@@ -27,10 +27,10 @@
         "enable-patching": true,
         "patches": {
             "drupal/migrate_plus": {
+                "EntityGenerate does not process the values correctly - https://www.drupal.org/project/migrate_plus/issues/2975266": "https://www.drupal.org/files/issues/2019-02-21/migrate_plus-provide_multiple_values-2975266-20.patch",
                 "Simple XML broken with UTF-16LE - https://www.drupal.org/project/migrate_plus/issues/3051858": "https://www.drupal.org/files/issues/2019-05-01/3051858-migrate_plus-simplexml_remove_trim-2.patch"
             },
             "drupal/migrate_cron": {
-                "EntityGenerate does not process the values correctly - https://www.drupal.org/project/migrate_plus/issues/2975266": "https://www.drupal.org/files/issues/2019-02-21/migrate_plus-provide_multiple_values-2975266-20.patch",
                 "Provide the ability to execute dependent migrations - https://www.drupal.org/project/migrate_cron/issues/3051619#comment-13087893": "https://www.drupal.org/files/issues/2019-04-30/3051619-migrate_cron-execute_dependencies-2.patch"
             }
         }
