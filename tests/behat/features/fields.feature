@@ -18,7 +18,7 @@ Feature: Fields for Grant content type
     And I see field "Audience"
     And I should see an "input#edit-field-audience-0-target-id.required" element
 
-    And I see field "Introduction Text"
+    And I see field "Introduction text"
     And I should see an "textarea#edit-field-landing-page-intro-text-0-value" element
     And I should not see an "textarea#edit-field-landing-page-intro-text-0-value.required" element
 
@@ -26,44 +26,29 @@ Feature: Fields for Grant content type
     And I should see a "textarea#edit-field-landing-page-summary-0-value" element
     And I should see a "textarea#edit-field-landing-page-summary-0-value.required" element
 
-    And I see field "Show Social Sharing?"
-    And I should see an "input#edit-field-show-social-sharing-value" element
-    And I should not see an "input#edit-field-show-social-sharing-value.required" element
-
-    And I see field "Show Contact Us?"
-    And I should see an "input#edit-field-landing-page-show-contact-value" element
-    And I should not see an "input#edit-field-landing-page-show-contact-value.required" element
-
-    And I see field "Show Content Rating?"
-    And I should see an "input#edit-field-show-content-rating-value" element
-    And I should not see an "input#edit-field-show-content-rating-value.required" element
-
     And the "#edit-field-featured-image" element should contain "Featured Image"
     And I should see an "input#edit-field-featured-image-entity-browser-entity-browser-open-modal" element
 
-    And I see field "Tags"
-    And I should see an "input#edit-field-tags-0-target-id" element
-    And I should not see an "input#edit-field-tags-0-target-id.required" element
-
-    And I see field "Department"
-    And I should see an "select#edit-field-node-department" element
-
-#    And I see "Funding Level"
-#    And I should see an "input#edit-field-node-funding-level-0-from" element
-
-    And I should see text matching "Contact"
-    And I click Contact
-    Then I should see text matching "Contact Us"
-
-    # Grant Overview paragraph
-    When I click "Grant Details"
+    And I click on the horizontal tab "Grant overview"
     Then I see field "Title"
     And I should see an "input#edit-field-overview-title-0-value" element
     And I should see an "textarea#edit-field-description-0-value" element
     And I should see an "input#edit-field-call-to-action-0-uri" element
+    # And I see "Funding Level"
+    # And I should see an "input#edit-field-node-funding-level-0-from" element
 
-    # Grant Timeline paragraph
-    When I click "Timeline"
+    # Grant date field.
+    And I should see an "input#edit-field-node-on-going-value" element
+    And I should see an "input#edit-field-node-dates-0-value-date" element
+    And I should see an "input#edit-field-node-dates-0-value-time" element
+    And I should see an "input#edit-field-node-dates-0-end-value-date" element
+    And I should see an "input#edit-field-node-dates-0-end-value-time" element
+
+    And I click on the horizontal tab "Grant Author"
+    And I see field "Department"
+    And I should see an "select#edit-field-node-department" element
+
+    And I click on the horizontal tab "Grant timeline"
     Then I should see an "#edit-field-node-timeline-0-top-type" element
     And I see field "field_node_timeline[0][subform][field_timeline][0][subform][field_paragraph_title][0][value]"
     And I see field "field_node_timeline[0][subform][field_timeline][0][subform][field_paragraph_date_range][0][value][date]"
@@ -74,17 +59,30 @@ Feature: Fields for Grant content type
     And I see field "field_node_timeline[0][subform][field_timeline][0][subform][field_paragraph_summary][0][value]"
     And I should see the button "Add Timeline" in the "content" region
 
-    # Grant Guidelines paragraph
-    When I click "Guidelines"
+    And I click on the horizontal tab "Grant guidelines"
     Then I should see 4 "#edit-field-node-guidelines-0-subform-field-paragraph-accordion-wrapper .field-multiple-table tr.draggable" elements
     And I should see the button "Add Accordion Content" in the "content" region
     When I press "Add Accordion Content"
     And I wait for AJAX to finish
     Then I should see 5 "#edit-field-node-guidelines-0-subform-field-paragraph-accordion-wrapper .field-multiple-table tr.draggable" elements
 
-    # Grant date field.
-    And I should see an "input#edit-field-node-on-going-value" element
-    And I should see an "input#edit-field-node-dates-0-value-date" element
-    And I should see an "input#edit-field-node-dates-0-value-time" element
-    And I should see an "input#edit-field-node-dates-0-end-value-date" element
-    And I should see an "input#edit-field-node-dates-0-end-value-time" element
+    And I scroll selector "#edit-group-sidebar" into view
+    And I click on the horizontal tab "Sidebar"
+
+    And I click on the detail "Contact"
+    And I see field "Show contact details"
+    And I should see an "input#edit-field-landing-page-show-contact-value" element
+    And I should not see an "input#edit-field-landing-page-show-contact-value.required" element
+    And I should see text matching "Contact us"
+    And I should see text matching "No Contact Us block added yet."
+    And I should see the button "Add Contact Us" in the "content" region
+
+    And I should see text matching "Social sharing"
+
+    And I see field "Show content rating?"
+    And I should see an "input#edit-field-show-content-rating-value" element
+    And I should not see an "input#edit-field-show-content-rating-value.required" element
+
+    And I see field "Tags"
+    And I should see an "input#edit-field-tags-0-target-id" element
+    And I should not see an "input#edit-field-tags-0-target-id.required" element

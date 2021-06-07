@@ -10,8 +10,8 @@ id: node.grant.field_node_link
 field_name: field_node_link
 entity_type: node
 bundle: grant
-label: 'Website URL'
-description: ''
+label: 'Redirect website'
+description: 'You can redirect to another external site, when redirecting, other information below this point are not required.'
 required: false
 translatable: false
 default_value: {  }

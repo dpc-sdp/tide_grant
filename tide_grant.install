@@ -6,8 +6,10 @@
  */
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\workflows\Entity\Workflow;
 use Drupal\node\Entity\Node;
@@ -42,6 +44,19 @@ function tide_grant_uninstall() {
   $config_factory = \Drupal::configFactory();
   // Remove the image styles that Linkit has installed.
   $config_factory->getEditable('user.role.grant_author')->delete();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function tide_grant_update_dependencies() {
+  $dependencies = [
+    'tide_grant' => [
+      '8015' => ['tide_core' => 8045],
+    ],
+  ];
+
+  return $dependencies;
 }
 
 /**
@@ -316,4 +331,368 @@ function tide_grant_update_8014() {
     $tide_grant_submission->set('elements', $webform_elements)
       ->save();
   }
+}
+
+/**
+ * Create a new field group.
+ *
+ * @param string $label
+ *   The label.
+ * @param string $type
+ *   The format type (tabs, tab, etc.).
+ * @param array $settings
+ *   The format settings.
+ * @param string $region
+ *   The form region.
+ * @param int $weight
+ *   The weight.
+ * @param string $parent
+ *   The parent name.
+ * @param array $children
+ *   The list of child components.
+ *
+ * @return array
+ *   The field group array.
+ */
+function _tide_grant_new_field_group(string $label, string $type, array $settings, string $region = 'content', int $weight = 0, string $parent = '', array $children = []) : array {
+  return [
+    'label' => $label,
+    'parent_name' => $parent,
+    'children' => $children,
+    'format_type' => $type,
+    'format_settings' => $settings,
+    'region' => $region,
+    'weight' => $weight,
+  ];
+}
+
+/**
+ * Create a new tabs field group.
+ *
+ * @param string $label
+ *   The label.
+ * @param string $direction
+ *   The tabs direction (horizontal or vertical).
+ * @param string $id
+ *   The CSS ID.
+ * @param string $classes
+ *   The CSS classes.
+ * @param string $region
+ *   The form region.
+ * @param int $weight
+ *   The form weight.
+ * @param string $parent
+ *   The parent name.
+ * @param array $children
+ *   The list of child components.
+ *
+ * @return array
+ *   The field group array.
+ */
+function _tide_grant_new_field_group_tabs(string $label, string $direction = 'horizontal', string $id = '', string $classes = '', string $region = 'content', int $weight = 0, string $parent = '', array $children = []) : array {
+  return _tide_grant_new_field_group($label, 'tabs', [
+    'direction' => $direction,
+    'id' => $id,
+    'classes' => $classes,
+  ], $region, $weight, $parent, $children);
+}
+
+/**
+ * Create a new tab field group.
+ *
+ * @param string $label
+ *   The label.
+ * @param string $parent
+ *   The parent name.
+ * @param array $settings
+ *   The format settings.
+ * @param string $region
+ *   The form region.
+ * @param int $weight
+ *   The form weight.
+ * @param array $children
+ *   The list of child components.
+ *
+ * @return array
+ *   The field group array.
+ */
+function _tide_grant_new_field_group_tab(string $label, string $parent, array $settings = [], string $region = 'content', int $weight = 0, array $children = []) : array {
+  return _tide_grant_new_field_group($label, 'tab', [
+    'description' => '',
+    'formatter' => 'closed',
+    'required_fields' => TRUE,
+    'id' => '',
+    'classes' => '',
+  ] + $settings, $region, $weight, $parent, $children);
+}
+
+/**
+ * Update node form of Grant.
+ */
+function tide_grant_update_8015() {
+  // Update permissions for Admin and Site Admin.
+  $permission = 'update grant author details';
+  foreach (['site_admin', 'administrator'] as $role_id) {
+    /** @var \Drupal\user\RoleInterface $role */
+    $role = Role::load($role_id);
+    if ($role) {
+      $role->grantPermission($permission);
+      $role->save();
+    }
+  }
+
+  // Update the field instances.
+  $update_field_config = [
+    'field_landing_page_summary' => [
+      'description' => t('Add short summary to introduce your grant. This summary will display on promotional cards or a card carousel.'),
+    ],
+    'field_landing_page_intro_text' => [
+      'label' => t('Introduction text'),
+      'description' => t('Add a brief summary of the page. This displays under the page title.'),
+    ],
+    'field_node_link' => [
+      'label' => t('Redirect website'),
+      'description' => t('You can redirect to another external site, when redirecting, other information below this point are not required.'),
+    ],
+    'field_featured_image' => [
+      'description' => t("One image can be added and must be 496px high x 818px wide."),
+    ],
+    'field_show_social_sharing' => [
+      'label' => t('Social sharing'),
+      'required' => TRUE,
+      'description' => t('The social sharing box can be hidden in special circumstances.'),
+    ],
+    'field_show_content_rating' => [
+      'label' => t('Show content rating?'),
+      'description' => t("Show 'Was this page helpful?' feedback form. Do not uncheck this form without admin approval."),
+    ],
+  ];
+
+  foreach ($update_field_config as $field_name => $replacements) {
+    /** @var \Drupal\Core\Field\FieldConfigInterface $field_config */
+    $field_config = FieldConfig::loadByName('node', 'grant', $field_name);
+    if ($field_config) {
+      $config = $field_config->toArray();
+      $config = array_replace_recursive($config, $replacements);
+      /** @var \Drupal\Core\Field\FieldConfigInterface $new_field_config */
+      $new_field_config = FieldConfig::create($config);
+      $new_field_config->original = $field_config;
+      $new_field_config->enforceIsNew(FALSE);
+      $new_field_config->save();
+    }
+  }
+
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  $form_display = EntityFormDisplay::load('node.grant.default');
+  if (!$form_display) {
+    return;
+  }
+
+  // Update field widgets.
+  $update_field_widgets = [
+    // Header.
+    'title' => 0,
+    'field_landing_page_summary' => 10,
+    'field_landing_page_intro_text' => 20,
+    'field_node_link' => 30,
+    // Featured image.
+    'field_featured_image' => [
+      'settings' => ['open' => TRUE],
+      'weight' => -90,
+    ],
+    // Grant details.
+    // Author detail.
+    'field_node_department' => [
+      'weight' => 50,
+    ],
+    // Sidebar.
+    'field_node_documents' => [
+      'settings' => ['open' => FALSE],
+      'weight' => 0,
+    ],
+    // Sidebar - Contact.
+    'field_landing_page_show_contact' => [
+      'label' => t('Show contact details'),
+      'weight' => 0,
+    ],
+    'field_landing_page_contact' => [
+      'label' => t('Contact us'),
+      'weight' => 10,
+    ],
+    // Sidebar.
+    'field_show_social_sharing' => [
+      'type' => 'options_buttons',
+      'weight' => 30,
+    ],
+    // General.
+    'field_topic' => ['weight' => 0],
+    'field_show_content_rating' => ['weight' => 1],
+  ];
+
+  // Use Select2 for Department field.
+  if (\Drupal::moduleHandler()->moduleExists('select2')) {
+    foreach (['field_node_department'] as $select2_field) {
+      $update_field_widgets[$select2_field]['type'] = 'select2_entity_reference';
+      $update_field_widgets[$select2_field]['settings'] = [
+        'match_operator' => 'CONTAINS',
+        'match_limit' => 10,
+        'autocomplete' => FALSE,
+        'width' => '100%',
+      ];
+    }
+  }
+
+  foreach ($update_field_widgets as $field => $replacements) {
+    $component = $form_display->getComponent($field);
+    if ($component) {
+      if (is_int($replacements)) {
+        $replacements = ['weight' => $replacements];
+      }
+      $component = array_replace_recursive($component, $replacements);
+      $form_display->setComponent($field, $component);
+    }
+  }
+
+  // Update the field groups.
+  $field_group = $form_display->getThirdPartySettings('field_group');
+
+  // Header section.
+  $field_group['group_section_header'] = _tide_grant_new_field_group_tabs('Header Section',
+    'horizontal', 'node-form-group-header-section', '', 'content', -100);
+  $field_group['group_section_header']['children'] = [
+    'group_header',
+  ];
+
+  // Header - Header tab.
+  $field_group['group_header'] = _tide_grant_new_field_group_tab('Header',
+    'group_section_header', [], 'content', -99);
+  $field_group['group_header']['children'] = [
+    'title',
+    'field_landing_page_intro_text',
+    'field_landing_page_summary',
+    'field_node_link',
+  ];
+
+  // Content section.
+  $field_group['group_section_content'] = _tide_grant_new_field_group_tabs('Content Section',
+    'horizontal', 'node-form-group-content-section', '', 'content', -70);
+  $field_group['group_section_content']['children'] = [
+    'group_grant_overview',
+    'group_grant_author',
+  ];
+
+  // Grant overview.
+  if (isset($field_group['group_grant_overview'])) {
+    $field_group['group_grant_overview'] = array_replace_recursive($field_group['group_grant_overview'], [
+      'label' => t('Grant overview'),
+      'format_type' => 'details',
+      'format_settings' => [
+        'open' => FALSE,
+        'description' => '',
+      ],
+      'parent_name' => 'group_section_content',
+      'region' => 'content',
+      'weight' => 10,
+    ]);
+  }
+
+  // Grant author.
+  if (isset($field_group['group_grant_author'])) {
+    $field_group['group_grant_author'] = array_replace_recursive($field_group['group_grant_author'], [
+      'label' => t('Grant Author'),
+      'format_type' => 'details',
+      'format_settings' => [
+        'open' => FALSE,
+        'description' => '',
+      ],
+      'parent_name' => 'group_section_content',
+      'region' => 'content',
+      'weight' => 20,
+    ]);
+  }
+
+  // Timeline section.
+  $field_group['group_section_timeline'] = _tide_grant_new_field_group_tabs('Timeline Section',
+    'horizontal', 'node-form-group-timeline-section', '', 'content', -60);
+  $field_group['group_section_timeline']['children'] = [
+    'group_grant_timeline',
+  ];
+  if (isset($field_group['group_grant_timeline'])) {
+    $field_group['group_grant_timeline'] = array_replace_recursive($field_group['group_grant_timeline'], [
+      'label' => t('Grant timeline'),
+      'format_type' => 'details',
+      'format_settings' => [
+        'open' => FALSE,
+        'description' => '',
+      ],
+      'parent_name' => 'group_section_timeline',
+      'region' => 'content',
+      'weight' => 0,
+    ]);
+  }
+
+  // Guideline section.
+  $field_group['group_section_guideline'] = _tide_grant_new_field_group_tabs('Guideline Section',
+    'horizontal', 'node-form-group-guideline-section', '', 'content', -50);
+  $field_group['group_section_guideline']['children'] = [
+    'group_guidelines',
+  ];
+  if (isset($field_group['group_guidelines'])) {
+    $field_group['group_guidelines'] = array_replace_recursive($field_group['group_guidelines'], [
+      'label' => t('Grant guidelines'),
+      'format_type' => 'details',
+      'format_settings' => [
+        'open' => FALSE,
+        'description' => '',
+      ],
+      'parent_name' => 'group_section_guideline',
+      'region' => 'content',
+      'weight' => 0,
+    ]);
+  }
+
+  // Sidebar tabs.
+  $field_group['group_section_sidebar'] = _tide_grant_new_field_group_tabs('Sidebar Section', 'horizontal', 'node-form-group-sidebar-section', '', 'content', -40, '', ['group_sidebar']);
+  $field_group['group_sidebar'] = _tide_grant_new_field_group_tab('Sidebar', 'group_section_sidebar', [], 'content', -61);
+  $field_group['group_sidebar']['children'] = [
+    'group_contact_us',
+    'field_node_documents',
+    'field_show_social_sharing',
+  ];
+
+  $field_group['group_contact_us'] = _tide_grant_new_field_group('Contact', 'details', [
+    'id' => '',
+    'classes' => '',
+    'formatter' => 'closed',
+    'description' => t('Specific contact details - name, address, phone, email can be added in a block to the sidebar.'),
+    'required_fields' => FALSE,
+    'open' => FALSE,
+  ], 'content', 20, 'group_sidebar', []);
+  $field_group['group_contact_us']['children'] = [
+    'field_landing_page_show_contact',
+    'field_landing_page_contact',
+  ];
+
+  foreach ($field_group as $group_name => $group_settings) {
+    $form_display->setThirdPartySetting('field_group', $group_name, $group_settings);
+  }
+
+  // Removes unused groups.
+  $unused_groups = [
+    'group_section_1',
+    'group_grant_details',
+    'group_page_header',
+    'group_body_content',
+    'group_supporting_documents',
+    'group_right_column',
+    'group_social_media',
+    'group_content_rating',
+    'group_contact',
+  ];
+  foreach ($unused_groups as $group_name) {
+    unset($field_group[$group_name]);
+    $form_display->unsetThirdPartySetting('field_group', $group_name);
+  }
+
+  $form_display->save();
 }
