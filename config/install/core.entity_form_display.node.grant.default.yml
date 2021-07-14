@@ -35,9 +35,7 @@ dependencies:
     - content_moderation
     - datetime_range
     - entity_browser
-    - entity_browser_entity_form
     - field_group
-    - inline_entity_form
     - link
     - maxlength
     - metatag
@@ -48,68 +46,6 @@ dependencies:
     - text
 third_party_settings:
   field_group:
-    group_section_1:
-      children:
-        - group_page_header
-        - group_body_content
-        - group_grant_author
-      parent_name: ''
-      weight: 0
-      format_type: tabs
-      format_settings:
-        id: ''
-        classes: ''
-        direction: horizontal
-      label: 'Section 1'
-      region: content
-    group_page_header:
-      children:
-        - title
-        - field_featured_image
-        - field_landing_page_intro_text
-        - field_landing_page_summary
-      parent_name: group_section_1
-      weight: 20
-      format_type: tab
-      format_settings:
-        id: ''
-        classes: ''
-        formatter: closed
-        description: ''
-        required_fields: true
-      label: 'Page Header'
-      region: content
-    group_body_content:
-      children:
-        - group_grant_details
-        - field_node_link
-      parent_name: group_section_1
-      weight: 21
-      format_type: tab
-      format_settings:
-        label: 'Grant Details'
-        formatter: closed
-        description: ''
-        required_fields: true
-        id: ''
-        classes: ''
-      label: 'Grant Details'
-      region: content
-    group_grant_details:
-      children:
-        - group_grant_overview
-        - group_grant_timeline
-        - group_guidelines
-        - group_supporting_documents
-      parent_name: group_body_content
-      weight: 16
-      format_type: tabs
-      format_settings:
-        id: ''
-        classes: ''
-        direction: horizontal
-      label: 'Grant Details'
-      region: content
     group_grant_overview:
       children:
         - field_overview_title
@@ -117,107 +53,49 @@ third_party_settings:
         - field_audience
         - field_node_on_going
         - field_node_dates
-        - field_description
         - field_call_to_action
-      parent_name: group_grant_details
-      weight: 23
-      format_type: tab
+        - field_description
+      parent_name: group_section_content
+      weight: 10
+      format_type: details
       format_settings:
-        label: Overview
         formatter: closed
         description: ''
         required_fields: true
         id: ''
         classes: ''
-      label: Overview
+        open: false
+      label: 'Grant overview'
       region: content
     group_grant_timeline:
       children:
         - field_node_timeline
-      parent_name: group_grant_details
-      weight: 24
-      format_type: tab
+      parent_name: group_section_timeline
+      weight: 0
+      format_type: details
       format_settings:
-        label: Timeline
         formatter: closed
         description: ''
         required_fields: true
         id: ''
         classes: ''
-      label: Timeline
+        open: false
+      label: 'Grant timeline'
       region: content
     group_guidelines:
       children:
         - field_node_guidelines
-      parent_name: group_grant_details
-      weight: 26
-      format_type: tab
+      parent_name: group_section_guideline
+      weight: 0
+      format_type: details
       format_settings:
-        label: Guidelines
         formatter: closed
         description: ''
         required_fields: true
         id: ''
         classes: ''
-      label: Guidelines
-      region: content
-    group_supporting_documents:
-      children:
-        - field_node_documents
-      parent_name: group_grant_details
-      weight: 27
-      format_type: tab
-      format_settings:
-        id: ''
-        classes: ''
-        formatter: closed
-        description: ''
-        required_fields: true
-      label: 'Supporting Documents'
-      region: content
-    group_right_column:
-      children:
-        - group_contact
-        - group_social_media
-        - group_content_rating
-      parent_name: ''
-      weight: 1
-      format_type: tabs
-      format_settings:
-        id: ''
-        classes: ''
-        direction: horizontal
-      label: 'Right Column'
-      region: content
-    group_social_media:
-      children:
-        - field_show_social_sharing
-      parent_name: group_right_column
-      weight: 5
-      format_type: tab
-      format_settings:
-        label: 'Social Sharing'
-        formatter: closed
-        description: ''
-        required_fields: true
-        id: ''
-        classes: ''
-      label: 'Social Sharing'
-      region: content
-    group_contact:
-      children:
-        - field_landing_page_show_contact
-        - field_landing_page_contact
-      parent_name: group_right_column
-      weight: 4
-      format_type: tab
-      format_settings:
-        id: ''
-        classes: ''
-        formatter: closed
-        description: ''
-        required_fields: true
-      label: Contact
+        open: false
+      label: 'Grant guidelines'
       region: content
     group_grant_author:
       children:
@@ -225,30 +103,128 @@ third_party_settings:
         - field_node_email
         - field_node_phone
         - field_node_department
-      parent_name: group_section_1
-      weight: 22
-      format_type: tab
+      parent_name: group_section_content
+      weight: 20
+      format_type: details
       format_settings:
         id: ''
         classes: ''
         formatter: closed
         description: ''
         required_fields: true
+        open: false
       label: 'Grant Author'
       region: content
-    group_content_rating:
-      children: {  }
-      parent_name: group_right_column
-      weight: 6
+    group_section_header:
+      label: 'Header Section'
+      parent_name: ''
+      children:
+        - group_header
+      format_type: tabs
+      format_settings:
+        direction: horizontal
+        id: node-form-group-header-section
+        classes: ''
+      region: content
+      weight: -100
+    group_header:
+      label: Header
+      parent_name: group_section_header
+      children:
+        - title
+        - field_landing_page_intro_text
+        - field_landing_page_summary
+        - field_node_link
       format_type: tab
+      format_settings:
+        description: ''
+        formatter: closed
+        required_fields: true
+        id: ''
+        classes: ''
+      region: content
+      weight: -99
+    group_section_content:
+      label: 'Content Section'
+      parent_name: ''
+      children:
+        - group_grant_overview
+        - group_grant_author
+      format_type: tabs
+      format_settings:
+        direction: horizontal
+        id: node-form-group-content-section
+        classes: ''
+      region: content
+      weight: -70
+    group_section_sidebar:
+      label: 'Sidebar Section'
+      parent_name: ''
+      children:
+        - group_sidebar
+      format_type: tabs
+      format_settings:
+        direction: horizontal
+        id: node-form-group-sidebar-section
+        classes: ''
+      region: content
+      weight: -40
+    group_sidebar:
+      label: Sidebar
+      parent_name: group_section_sidebar
+      children:
+        - group_contact_us
+        - field_node_documents
+        - field_show_social_sharing
+      format_type: tab
+      format_settings:
+        description: ''
+        formatter: closed
+        required_fields: true
+        id: ''
+        classes: ''
+      region: content
+      weight: -61
+    group_contact_us:
+      label: Contact
+      parent_name: group_sidebar
+      children:
+        - field_landing_page_show_contact
+        - field_landing_page_contact
+      format_type: details
       format_settings:
         id: ''
         classes: ''
         formatter: closed
-        description: ''
-        required_fields: true
-      label: 'Content rating'
+        description: 'Specific contact details - name, address, phone, email can be added in a block to the sidebar.'
+        required_fields: false
+        open: false
       region: content
+      weight: 20
+    group_section_timeline:
+      label: 'Timeline Section'
+      parent_name: ''
+      children:
+        - group_grant_timeline
+      format_type: tabs
+      format_settings:
+        direction: horizontal
+        id: node-form-group-timeline-section
+        classes: ''
+      region: content
+      weight: -60
+    group_section_guideline:
+      label: 'Guideline Section'
+      parent_name: ''
+      children:
+        - group_guidelines
+      format_type: tabs
+      format_settings:
+        direction: horizontal
+        id: node-form-group-guideline-section
+        classes: ''
+      region: content
+      weight: -50
 id: node.grant.default
 targetEntityType: node
 bundle: grant
@@ -266,6 +242,7 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
@@ -286,7 +263,7 @@ content:
     type: text_textarea
     region: content
   field_featured_image:
-    weight: 2
+    weight: -90
     settings:
       entity_browser: tide_image_browser
       field_widget_display: rendered_entity
@@ -296,12 +273,12 @@ content:
       field_widget_display_settings:
         view_mode: media_browser_preview
       field_widget_replace: false
-      open: false
+      open: true
     third_party_settings: {  }
     type: entity_browser_entity_reference
     region: content
   field_landing_page_contact:
-    weight: 13
+    weight: 10
     settings:
       title: 'Contact Us block'
       title_plural: 'Contact Us blocks'
@@ -313,7 +290,7 @@ content:
     type: entity_reference_paragraphs
     region: content
   field_landing_page_intro_text:
-    weight: 3
+    weight: 20
     settings:
       rows: 5
       placeholder: ''
@@ -321,14 +298,14 @@ content:
     type: string_textarea
     region: content
   field_landing_page_show_contact:
-    weight: 12
+    weight: 0
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_landing_page_summary:
-    weight: 4
+    weight: 10
     settings:
       rows: 5
       placeholder: ''
@@ -341,7 +318,7 @@ content:
     type: string_textarea
     region: content
   field_metatags:
-    weight: 13
+    weight: 15
     settings:
       sidebar: true
     third_party_settings: {  }
@@ -362,19 +339,19 @@ content:
     type: daterange_default
     region: content
   field_node_department:
-    weight: 32
+    weight: 50
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_node_documents:
-    weight: 17
+    weight: 0
     settings:
       entity_browser: tide_document_browser
       field_widget_display: rendered_entity
       field_widget_edit: true
       field_widget_remove: true
-      open: true
+      open: false
       selection_mode: selection_append
       field_widget_display_settings:
         view_mode: media_browser_preview
@@ -392,7 +369,13 @@ content:
     region: content
   field_node_funding_level:
     weight: 15
-    settings: {  }
+    settings:
+      placeholder:
+        from: ''
+        to: ''
+      label:
+        from: From
+        to: to
     third_party_settings: {  }
     type: range
     region: content
@@ -410,12 +393,12 @@ content:
       default_paragraph_type: accordion
       closed_mode_threshold: 0
       features:
-        duplicate: duplicate
         collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
     region: content
   field_node_link:
-    weight: 17
+    weight: 30
     settings:
       placeholder_url: ''
       placeholder_title: ''
@@ -450,8 +433,8 @@ content:
       default_paragraph_type: timelines
       closed_mode_threshold: 0
       features:
-        duplicate: duplicate
         collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
     region: content
   field_overview_title:
@@ -466,18 +449,17 @@ content:
     type: string_textfield
     region: content
   field_show_content_rating:
-    weight: 2
+    weight: 1
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_show_social_sharing:
-    weight: 13
-    settings:
-      display_label: true
+    weight: 30
+    settings: {  }
     third_party_settings: {  }
-    type: boolean_checkbox
+    type: options_buttons
     region: content
   field_tags:
     weight: 11
@@ -485,15 +467,17 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
   field_topic:
-    weight: 12
+    weight: 0
     settings:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
@@ -532,7 +516,7 @@ content:
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 1
+    weight: 0
     region: content
     settings:
       size: 60
@@ -548,6 +532,7 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     region: content
     third_party_settings: {  }
   url_redirects:

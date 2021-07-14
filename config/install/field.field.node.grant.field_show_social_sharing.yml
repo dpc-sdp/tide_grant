@@ -8,8 +8,8 @@ id: node.grant.field_show_social_sharing
 field_name: field_show_social_sharing
 entity_type: node
 bundle: grant
-label: 'Show Social Sharing?'
-description: 'Check this box if you want to show Social Sharing block on this page.'
+label: 'Social sharing'
+description: 'The social sharing box can be hidden in special circumstances.'
 required: false
 translatable: true
 default_value:
