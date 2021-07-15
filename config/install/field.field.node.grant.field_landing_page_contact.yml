@@ -11,7 +11,7 @@ id: node.grant.field_landing_page_contact
 field_name: field_landing_page_contact
 entity_type: node
 bundle: grant
-label: 'Contact Us'
+label: 'Contact us'
 description: ''
 required: false
 translatable: true
@@ -86,9 +86,6 @@ settings:
         enabled: false
       event_details:
         weight: 54
-        enabled: false
-      featured_news:
-        weight: 55
         enabled: false
       grants_overview:
         weight: 56

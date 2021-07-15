@@ -1,0 +1,3 @@
+update grant author details:
+  title: Update Grant Author details
+  description: 'Allow to update the fields of Grant Author details (full name, email, contact phone number, department).'

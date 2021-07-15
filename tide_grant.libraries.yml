@@ -8,3 +8,7 @@ drupal.paragraphs.actions:
     - core/jquery.form
     - core/drupal.ajax
     - core/drupal
+grant_form:
+  css:
+    theme:
+      css/grant.css: {}
