@@ -8,8 +8,8 @@
         "dpc-sdp/tide_media": "^1.5.1",
         "dpc-sdp/tide_webform": "^1.1.8",
         "drupal/migrate_cron": "^1.2",
-        "drupal/migrate_plus": "4.2",
-        "drupal/migrate_tools": "^4.4",
+        "drupal/migrate_plus": "^5.0",
+        "drupal/migrate_tools": "^5.0",
         "drupal/range": "^1.1"
     },
     "suggest": {
@@ -27,7 +27,6 @@
         "enable-patching": true,
         "patches": {
             "drupal/migrate_plus": {
-                "EntityGenerate does not process the values correctly - https://www.drupal.org/project/migrate_plus/issues/2975266": "https://www.drupal.org/files/issues/2019-02-21/migrate_plus-provide_multiple_values-2975266-20.patch",
                 "Simple XML broken with UTF-16LE - https://www.drupal.org/project/migrate_plus/issues/3051858": "https://www.drupal.org/files/issues/2019-05-01/3051858-migrate_plus-simplexml_remove_trim-2.patch"
             },
             "drupal/migrate_cron": {
