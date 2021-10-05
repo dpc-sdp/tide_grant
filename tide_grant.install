@@ -126,7 +126,7 @@ function tide_grant_update_8004() {
  * Remove Funding level text field from Grant Content Type [SDPA-1466].
  */
 function tide_grant_update_8005() {
-  /* @var $entityFieldManager Drupal\Core\Entity\EntityFieldManager */
+  /** @var $entityFieldManager Drupal\Core\Entity\EntityFieldManager */
   $entityFieldManager = Drupal::service('entity_field.manager');
   $fields = $entityFieldManager->getFieldDefinitions('node', 'grant');
   if (isset($fields['field_node_fundinglevel'])) {
@@ -216,6 +216,7 @@ function tide_grant_update_8011() {
     $bundles = $config->get('bundles');
     if ($bundles) {
       foreach ($bundles as $bundle) {
+        $enabled_bundles = [];
         $enabled_bundles[] = $bundle['bundle'];
       }
       if (!in_array('grant', $enabled_bundles)) {
