@@ -697,3 +697,22 @@ function tide_grant_update_8015() {
 
   $form_display->save();
 }
+
+/**
+ * Update display form for tiemline.
+ */
+function tide_grant_update_8016() {
+  // Update the form and view display.
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_id = 'core.entity_form_display.paragraph.timeline.grants';
+  $display_config = \Drupal::configFactory()->getEditable($config_id);
+  $display_config_read = _tide_read_config($config_id, $config_location, FALSE);
+  $fields_settings = $display_config_read['content'];
+  $dependencies = $display_config_read['dependencies']['config'];
+  if ($display_config) {
+    $display_config->set('content', $fields_settings);
+    $display_config->set('dependencies.config', $dependencies);
+    $display_config->save();
+  }
+}
