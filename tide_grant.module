@@ -217,6 +217,13 @@ function tide_grant_webform_submission_presave($submission) {
     // Set Grant Author user as node author.
     if ($user = user_load_by_name('Grant Author')) {
       $node->setOwnerId($user->id());
+      // It needs to set this mandatory field to create Jira ticket.
+      if ($node->hasField('field_department_agency') && $user->get('field_department_agency')->first()) {
+        $user_dept = $user->get('field_department_agency')->first()->getValue()['target_id'];
+        if ($user_dept) {
+          $node->set('field_department_agency', ['target_id' => $user_dept]);
+        }
+      }
     }
 
     $node->save();
