@@ -142,6 +142,14 @@ function tide_grant_config_ignore_settings_alter(array &$settings) {
 function tide_grant_webform_submission_presave($submission) {
   if ($submission->getWebform()->get('id') === 'tide_grant_submission') {
     $submission_data = $submission->getData();
+    // SDPAP-5181 Front end submits the value as numeric
+    // Triggers invalid validation error from core 
+    // See /Drupal/Core/Form/FormValidator.php $is_empty_value
+    if (is_numeric($submission_data['funding_level_from'])) {
+      // Converting the value to string.
+      $submission_data['funding_level_from'] = strval($submission_data['funding_level_from']);
+      $submission->setData($submission_data);
+    }
     // Create node object with values from webform submission.
     $node = Node::create([
       'type' => 'grant',
