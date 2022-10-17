@@ -64,7 +64,7 @@ function tide_grant_update_dependencies() {
  */
 function tide_grant_update_8001() {
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('tide_grant.settings', $config_location);
 }
 
@@ -83,7 +83,7 @@ function tide_grant_update_8002() {
  */
 function tide_grant_update_8003() {
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('webform.webform.tide_grant_submission', $config_location);
 }
 
@@ -93,7 +93,7 @@ function tide_grant_update_8003() {
 function tide_grant_update_8004() {
   // First import Grant Author role configuration.
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('user.role.grant_author', $config_location);
 
   // Create new Grant Author user.
@@ -139,7 +139,7 @@ function tide_grant_update_8005() {
  */
 function tide_grant_update_8006() {
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('webform.webform.tide_grant_submission', $config_location);
 }
 
@@ -148,7 +148,7 @@ function tide_grant_update_8006() {
  */
 function tide_grant_update_8007() {
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('core.entity_form_display.node.grant.default', $config_location);
   _tide_import_single_config('core.entity_view_display.node.grant.default', $config_location);
   _tide_import_single_config('field.field.node.grant.field_description', $config_location);
@@ -161,7 +161,7 @@ function tide_grant_update_8007() {
 function tide_grant_update_8008() {
   // Import feed URL configuration.
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   _tide_import_single_config('tide_grant.settings', $config_location);
   // Enable migration modules.
   $module_installer = \Drupal::service('module_installer');
@@ -238,7 +238,7 @@ function tide_grant_update_8012() {
   // Adding the field from config install.
   $metaTags = 'field.field.node.grant.field_metatags';
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   // Check if field already exported to config/sync.
   $config_read = _tide_read_config($metaTags, $config_location, TRUE);
 
@@ -321,7 +321,7 @@ function tide_grant_update_8014() {
   module_load_include('inc', 'tide_core', 'includes/helpers');
   // Get the new configs.
   $webform = 'webform.webform.tide_grant_submission';
-  $config_path = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_path = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   // Rread it from the config sync directory.
   $webform_config = _tide_read_config($webform, $config_path, FALSE);
   $webform_elements = $webform_config['elements'];
@@ -704,7 +704,7 @@ function tide_grant_update_8015() {
 function tide_grant_update_8016() {
   // Update the form and view display.
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'tide_grant') . '/config/install'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
   $config_id = 'core.entity_form_display.paragraph.timeline.grants';
   $display_config = \Drupal::configFactory()->getEditable($config_id);
   $display_config_read = _tide_read_config($config_id, $config_location, FALSE);
