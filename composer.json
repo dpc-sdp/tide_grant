@@ -4,9 +4,9 @@
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "require": {
-        "dpc-sdp/tide_core": "dev-reference",
-        "dpc-sdp/tide_media": "dev-reference",
-        "dpc-sdp/tide_webform": "dev-reference",
+        "dpc-sdp/tide_core": "^3.0.0",
+        "dpc-sdp/tide_media": "^3.0.0",
+        "dpc-sdp/tide_webform": "^3.0.0",
         "drupal/migrate_cron": "^1.2",
         "drupal/migrate_plus": "^5.0",
         "drupal/migrate_tools": "^5.0",
@@ -19,10 +19,6 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        "drupal/entity_embed": {
-          "type": "git",
-          "url": "https://git.drupalcode.org/issue/entity_embed-3272732.git"
         }
     },
     "minimum-stability": "alpha",
