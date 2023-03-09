@@ -117,7 +117,7 @@ function _tide_grant_form_node_form_after_build(array $form, FormStateInterface 
 function _tide_grant_validate_grant_dates(array &$form, FormStateInterface $form_state) {
   $triggering_element = $form_state->getTriggeringElement();
   $parents = $triggering_element['#parents'];
-  if (array_search('submit', $parents)) { 
+  if (array_search('submit', $parents)) {
     $on_going = $form_state->getValue('field_node_on_going');
     $dates = $form_state->getValue('field_node_dates');
     $start_date = !empty($dates) ? $dates[0]["value"] : '';
