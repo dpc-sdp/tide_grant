@@ -19,6 +19,10 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        "drupal/entity_embed": {
+          "type": "git",
+          "url": "https://git.drupalcode.org/issue/entity_embed-3272732.git"
         }
     },
     "minimum-stability": "alpha",
