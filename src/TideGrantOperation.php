@@ -7,6 +7,9 @@ use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\workflows\Entity\Workflow;
 
+/**
+ * Helper class for install/update ops.
+ */
 class TideGrantOperation {
 
   // Enable Editorial workflow if workflow module is enabled.
