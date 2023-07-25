@@ -4,15 +4,13 @@
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "require": {
+        "dpc-sdp/tide_api": "dev-feature/SRM-948-d10-update",
         "dpc-sdp/tide_core": "dev-feature/SRM-870-d10-update",
         "dpc-sdp/tide_media": "dev-feature/SRM-870-939-d10-update-d10",
         "dpc-sdp/tide_webform": "dev-feature/SRM-942-drupal-10",
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.0",
         "drupal/range": "^1.5"
-    },
-    "suggest": {
-        "dpc-sdp/tide_api:dev-feature/SRM-948-d10-update": "Allows to use Drupal in headless mode"
     },
     "repositories": {
         "drupal": {

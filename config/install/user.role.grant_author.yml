@@ -17,4 +17,3 @@ permissions:
   - 'use editorial transition needs_review'
   - 'use editorial transition needs_review_draft'
   - 'use needs_review_draft transition'
-  - 'use needs_review_needs_review transition'
