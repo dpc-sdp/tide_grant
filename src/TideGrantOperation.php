@@ -12,14 +12,16 @@ use Drupal\workflows\Entity\Workflow;
  */
 class TideGrantOperation {
 
-  // Enable Editorial workflow if workflow module is enabled.
-  public function enable_editorial_workflow() {
+  /**
+   * Enable Editorial workflow if workflow module is enabled.
+   */
+  public function enableEditorialWorkflow() {
     $moduleHandler = \Drupal::service('module_handler');
     if (!\Drupal::service('config.installer')->isSyncing() && $moduleHandler->moduleExists('workflows')) {
       $editorial_workflow = Workflow::load('editorial');
       if ($editorial_workflow) {
         $editorial_workflow->getTypePlugin()
-        ->addEntityTypeAndBundle('node', 'grant');
+          ->addEntityTypeAndBundle('node', 'grant');
         $editorial_workflow->save();
       }
     }
@@ -28,7 +30,7 @@ class TideGrantOperation {
   /**
    * Add Grant Author user.
    */
-  public function add_grant_author_user() {
+  public function addGrantAuthorUser() {
     if (empty(Role::load('grant_author'))) {
       return;
     }
@@ -62,7 +64,7 @@ class TideGrantOperation {
   /**
    * Assign necessary permissions .
    */
-  public function assign_necessary_permissions() {
+  public function assignNecessaryPermissions() {
     $role_permissions = [
       'editor' => [
         'clone grant content',
