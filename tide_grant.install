@@ -16,9 +16,9 @@ function tide_grant_install() {
     return;
   }
   $grantoperation = new TideGrantOperation();
-  $grantoperation->add_grant_author_user();
-  $grantoperation->assign_necessary_permissions();
-  $grantoperation->enable_editorial_workflow();
+  $grantoperation->addGrantAuthorUser();
+  $grantoperation->assignNecessaryPermissions();
+  $grantoperation->enableEditorialWorkflow();
 }
 
 /**
