@@ -716,3 +716,20 @@ function tide_grant_update_8016() {
     $display_config->save();
   }
 }
+
+/**
+ * Remove deprecated modules before d10 upgrade.
+ */
+function tide_grant_update_8017() {
+  // Check if module is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('migrate_cron')) {
+    // If exists, uninstall module.
+    \Drupal::service('module_installer')->uninstall(['migrate_cron']);
+  }
+  $config_factory = \Drupal::configFactory();
+  // Delete the related config.
+  $config = $config_factory->getEditable('migrate_cron.settings.yml');
+  if ($config) {
+    $config->delete();
+  }
+}
