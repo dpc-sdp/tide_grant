@@ -18,7 +18,6 @@ This module defines all the fields, paragraph types and block types used in Gran
 * [Tide Core](https://github.com/dpc-sdp/tide_core)
 * [Tide Media](https://github.com/dpc-sdp/tide_media)
 * [Tide Webform](https://github.com/dpc-sdp/tide_webform)
-* [Migrate Cron](https://www.drupal.org/project/migrate_cron)
 * [Migrate Plus](https://www.drupal.org/project/migrate_plus)
 * [Migrate Tools](https://www.drupal.org/project/migrate_tools)
 * [Range](https://www.drupal.org/project/range)

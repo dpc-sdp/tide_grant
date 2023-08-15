@@ -9,7 +9,6 @@ dependencies:
   - dpc-sdp:tide_webform
   - drupal:datetime_range
   - drupal:menu_ui
-  - drupal:migrate_cron
   - drupal:migrate_plus
   - drupal:migrate_tools
   - drupal:range
@@ -61,7 +60,6 @@ config_devel:
     - field.storage.node.field_node_on_going
     - field.storage.node.field_node_phone
     - field.storage.node.field_overview_title
-    - migrate_cron.settings
     - migrate_plus.migration_group.default
     - tide_grant.settings
     - webform.webform.tide_grant_submission
