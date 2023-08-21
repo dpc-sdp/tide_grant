@@ -5,9 +5,9 @@
  * Tide Grant module functionality.
  */
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Entity\Node;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\node\NodeInterface;
 
 /**
@@ -262,7 +262,7 @@ function tide_grant_node_insert(NodeInterface $node) {
       $node->save();
     }
     if (\Drupal::moduleHandler()->moduleExists('simple_sitemap')) {
-      $generator = \Drupal::service('simple_sitemap.generator');
+      $generator = \Drupal::service('simple_sitemap.entity_manager');
       $settings = [
         'index' => FALSE,
         'priority' => 0.5,
