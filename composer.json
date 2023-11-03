@@ -5,7 +5,7 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "dpc-sdp/tide_api": "^4.0.0",
-        "dpc-sdp/tide_core": "^4.0.0",
+        "dpc-sdp/tide_core": "dev-feature/SDPAP-8421-adds-Content-Category-to-tide_core as 4.0.1",
         "dpc-sdp/tide_media": "^4.0.0",
         "dpc-sdp/tide_webform": "^4.0.0",
         "drupal/migrate_plus": "^6.0",
