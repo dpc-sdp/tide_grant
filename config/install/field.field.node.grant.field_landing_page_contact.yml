@@ -87,9 +87,6 @@ settings:
       event_details:
         weight: 54
         enabled: false
-      grants_overview:
-        weight: 56
-        enabled: false
       introduction_banner:
         weight: 57
         enabled: false
