@@ -62,7 +62,7 @@ class TideGrantOperation {
   }
 
   /**
-   * Assign necessary permissions .
+   * Assign necessary permissions.
    */
   public function assignNecessaryPermissions() {
     $role_permissions = [
