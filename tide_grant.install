@@ -19,6 +19,7 @@ function tide_grant_install() {
   $grantoperation->addGrantAuthorUser();
   $grantoperation->assignNecessaryPermissions();
   $grantoperation->enableEditorialWorkflow();
+  $grantoperation->addDefaultValueToContentCategory();
 }
 
 /**
@@ -34,4 +35,30 @@ function tide_grant_uninstall() {
   $config_factory = \Drupal::configFactory();
   // Remove the image styles that Linkit has installed.
   $config_factory->getEditable('user.role.grant_author')->delete();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function tide_grant_update_dependencies() {
+  $dependencies['tide_grant'][10001] = ['tide_core' => 10005];
+  return $dependencies;
+}
+
+/**
+ * Imports field.field.node.grant.field_content_category for existing sites.
+ */
+function tide_grant_update_10001() {
+  \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/helpers');
+  $config_location = [\Drupal::service('extension.list.module')->getPath('tide_grant') . '/config/install'];
+  $config_read = _tide_read_config('field.field.node.grant.field_content_category', $config_location, TRUE);
+  $storage = \Drupal::entityTypeManager()->getStorage('field_config');
+  $id = $storage->getIDFromConfigName('field.field.node.grant.field_content_category', $storage->getEntityType()->getConfigPrefix());
+  if ($storage->load($id) == NULL) {
+    $config_entity = $storage->createFromStorageRecord($config_read);
+    $config_entity->save();
+  }
+  \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/updates');
+  _tide_core_field_content_category_default_value('grant', 'Grant');
+  _tide_core_content_category_form_display('grant');
 }
