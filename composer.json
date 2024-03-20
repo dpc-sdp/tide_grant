@@ -20,7 +20,7 @@
   },
   "require": {
     "dpc-sdp/tide_api": "dev-reference",
-    "dpc-sdp/tide_core": "dev-reference",
+    "dpc-sdp/tide_core": "dev-reference-SDPAP-8421 as dev-reference",
     "dpc-sdp/tide_media": "dev-reference",
     "dpc-sdp/tide_webform": "dev-reference",
     "drupal/migrate_plus": "^6.0",
