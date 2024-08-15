@@ -8,7 +8,7 @@
         "dpc-sdp/tide_core": "^4.0.0",
         "dpc-sdp/tide_media": "^4.0.0",
         "dpc-sdp/tide_webform": "^4.0.0",
-        "drupal/migrate_plus": "^6.0",
+        "drupal/migrate_plus": "6.0.2",
         "drupal/migrate_tools": "^6.0",
         "drupal/range": "^1.5"
     },
